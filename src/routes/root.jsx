@@ -1,7 +1,7 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { Calendar, Car, Fuel, MapPin } from 'lucide-react'
 import { NavLink } from '../components/ui/NavLink'
-import { Link } from '../components/ui/Link'
+import { Header } from '../components/ui/Header'
 
 export function Root() {
     const location = useLocation()
@@ -17,10 +17,7 @@ export function Root() {
     return (
         <div className='max-w-md mx-auto h-dvh'>
             <div className='p-3 pb-[70px]'>
-                <header className='flex justify-between items-baseline font-semibold text-xl mt-2 mb-8'>
-                    <h1>Rosalia</h1>
-                    <Link to={'/login'}>Login</Link>
-                </header>
+                <Header />
                 <Outlet />
             </div>
 

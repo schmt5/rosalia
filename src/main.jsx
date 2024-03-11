@@ -13,6 +13,7 @@ import { TripsIndex } from './routes/trips/TripsIndex';
 import { TripCreate } from './routes/trips/TripCreate';
 import { TripEdit } from './routes/trips/TripEdit';
 import { Login } from './routes/Login';
+import { Logout } from './routes/Logout';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
     element: <Root />,
     children: [
       { path: 'login', element: <Login /> },
+      { path: 'logout', element: <Logout /> },
       {
         path: 'trips', element: <Outlet />, children: [
           { index: true, element: <TripsIndex /> },

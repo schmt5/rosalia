@@ -4,40 +4,14 @@ import { Plus } from "lucide-react"
 import useSWR from "swr"
 import { pb } from "../../lib/pb"
 
-const trips = [
-    {
-        id: '1',
-        createdBy: {
-            id: '1',
-            name: 'Jamina',
-        },
-        km: 12,
-        from: new Date(),
-        to: new Date(),
-        payed: false,
-    },
-    {
-        id: '2',
-        createdBy: {
-            id: '2',
-            name: 'Tiri',
-        },
-        km: 50,
-        from: new Date(),
-        to: new Date(),
-        payed: false,
-    },
-]
-
 const fetcher = (key) => pb.collection(key).getFullList({
     sort: '-created',
+    expand: 'createdBy',
 });
 
 export function TripsIndex() {
     const { data } = useSWR('trips', fetcher)
-
-    console.log(data)
-
+    const trips = data
 
     const userId = '1'
     const fromFormatter = new Intl.DateTimeFormat('de-DE', {
@@ -50,35 +24,33 @@ export function TripsIndex() {
         year: '2-digit',
     })
 
-
-
     return (
         <div className="flex flex-col gap-2">
-            {trips.map((trip) => {
-                const isOneDayTrip = trip.from.getDate() === trip.to.getDate()
+            {trips?.map((trip) => {
+                const from = new Date(trip.from)
+                const to = new Date(trip.to)
+                const isOneDayTrip = from.getDate() === to.getDate()
                 const isCreatedByUser = trip.createdBy.id === userId
 
                 return (
-                    (
-                        <div key={trip.id} className='flex gap-4 justify-between mb-4 rounded border'>
-                            <div className='p-3'>
-                                <p className="font-semibold">{trip.createdBy.name}</p>
-                                {isOneDayTrip ? <p>{toFormatter.format(trip.to)}</p> :
-                                    (
-                                        <p>{`${fromFormatter.format(trip.from)} - ${toFormatter.format(trip.to)}`}</p>
-                                    )}
-                                {isCreatedByUser && (
-                                    <Link to={`/trips/edit/${trip.id}`}>
-                                        Bearbeiten
-                                    </Link>
+                    <div key={trip.id} className='flex gap-4 justify-between mb-4 rounded border'>
+                        <div className='p-3'>
+                            <p className="font-semibold">{trip.expand.createdBy.username}</p>
+                            {isOneDayTrip ? <p>{toFormatter.format(to)}</p> :
+                                (
+                                    <p>{`${fromFormatter.format(from)} - ${toFormatter.format(to)}`}</p>
                                 )}
-                            </div>
-                            <div className='py-3 px-6 bg-neutral-100 flex flex-col justify-center gap-0'>
-                                <span className='font-semibold text-xl'>{trip.km}</span>
-                                <span>km</span>
-                            </div>
+                            {isCreatedByUser && (
+                                <Link to={`/trips/edit/${trip.id}`}>
+                                    Bearbeiten
+                                </Link>
+                            )}
                         </div>
-                    )
+                        <div className='py-3 px-6 bg-neutral-100 flex flex-col justify-center gap-0'>
+                            <span className='font-semibold text-xl'>{trip.km}</span>
+                            <span>km</span>
+                        </div>
+                    </div>
                 )
             })}
 

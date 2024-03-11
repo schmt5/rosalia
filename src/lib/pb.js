@@ -1,3 +1,3 @@
 import PocketBase from 'pocketbase';
 
-export const pb = new PocketBase('https://super-space-guacamole-6r9vvr59v45h5w4-8090.app.github.dev');
+export const pb = new PocketBase('http://127.0.0.1:8090');

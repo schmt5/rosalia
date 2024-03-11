@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form"
 import { Button } from "../../components/ui/button"
 import { useNavigate } from "react-router-dom"
+import { pb } from "../../lib/pb"
 
 export function TripCreate() {
     const navigate = useNavigate()
@@ -17,9 +18,20 @@ export function TripCreate() {
     })
 
     const onSubmit = async (data) => {
-        console.log(data)
+        try {
+            const trip = {
+                "km": data.km,
+                "from": data.from,
+                "to": data.from,
+                "payed": false,
+                "createdBy": "n6fo1fak8tuo0yp"
+            };
 
-        navigate('/trips')
+            await pb.collection('trips').create(trip);
+            navigate('/trips')
+        } catch (error) {
+            console.error('Error creating trip:', error);
+        }
     }
 
     return (
